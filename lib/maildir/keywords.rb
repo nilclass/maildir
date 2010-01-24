@@ -51,7 +51,7 @@ module Maildir::Keywords
       else # message doesn't exist
         fname = File.join(keyword_dir, file)
         if File.stat(fname).ctime < (Time.now - (15 * 60))
-          File.unlink(fname)
+          FileUtils.rm(fname)
         end
       end
       next(keyword_files)
@@ -59,7 +59,7 @@ module Maildir::Keywords
     # process keyword files
     keyword_files.each_pair do |key, files|
       files.sort! { |a, b| a[0] <=> b[0] }
-      files[0..-2].each { |f| File.unlink(File.join(keyword_dir, ".#{f.join('.')}")) } if files.last[0] < t
+      files[0..-2].each { |f| FileUtils.rm(File.join(keyword_dir, ".#{f.join('.')}")) } if files.last[0] < t
       msg = messages[key]
       file = (File.exist?(File.join(keyword_dir, files.last[1])) ? files.last[1] : ".#{files.last.join('.')}")
       current_keywords = File.read(File.join(keyword_dir, file)).split(/\s+/)
