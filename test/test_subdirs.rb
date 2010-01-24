@@ -30,6 +30,18 @@ class TestSubdirs < Test::Unit::TestCase
       @maildir.create_subdir("test")
       assert @maildir.subdirs.map(&:name).include?("test")
     end
+
+    should "find the subdir by path" do
+      assert_nothing_raised do
+        @maildir.subdir_by_path('a.x')
+      end
+    end
+
+    should "raise MaildirNotFound" do
+      assert_raise Maildir::Subdirs::MaildirNotFound do
+        @maildir.subdir_by_path('a.b.c')
+      end
+    end
   end
 
   context "A subdir" do

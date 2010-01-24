@@ -1,13 +1,25 @@
 # implements subdirs as used by the Courier Mail Server (courier-mta.org)
 require 'maildir'
 module Maildir::Subdirs
+  class MaildirNotFound < Exception
+  end
   ROOT_NAME = 'INBOX'
   DELIM = '.'
 
   def self.included(base)
-    base.instance_eval do 
+    base.instance_eval do
       alias_method :inspect_without_subdirs, :inspect
       alias_method :inspect, :inspect_with_subdirs
+    end
+  end
+
+  def subdir_by_path(sd_path)
+    if(File.directory?(p = File.join(path, ".#{sd_path}")))
+      Maildir.new(p, false)
+    elsif(File.directory?(p = File.join(path, ".INBOX.#{sd_path}")))
+      Maildir.new(p, false)
+    else
+      raise MaildirNotFound
     end
   end
 
@@ -39,7 +51,7 @@ module Maildir::Subdirs
       @subdirs ||= root.subdirs(false).select { |md| subdir_parts(File.basename(md.path))[0..-2] == my_parts }
     end
   end
-  
+
   # Friendly inspect method
   def inspect_with_subdirs
     "#<#{self.class} path=#{@path} mailbox_path=#{mailbox_path}>"
