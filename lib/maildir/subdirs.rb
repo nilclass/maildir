@@ -14,9 +14,10 @@ module Maildir::Subdirs
   end
 
   def subdir_by_path(sd_path)
+    return self if sd_path == ROOT_NAME
     if(File.directory?(p = File.join(path, ".#{sd_path}")))
       Maildir.new(p, false)
-    elsif(File.directory?(p = File.join(path, ".INBOX.#{sd_path}")))
+    elsif(File.directory?(p = File.join(path, ".#{ROOT_NAME}.#{sd_path}")))
       Maildir.new(p, false)
     else
       raise MaildirNotFound

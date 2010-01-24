@@ -42,6 +42,10 @@ class TestSubdirs < Test::Unit::TestCase
         @maildir.subdir_by_path('a.b.c')
       end
     end
+
+    should "return the mailbox itself" do
+      assert @maildir.subdir_by_path('INBOX') == @maildir
+    end
   end
 
   context "A subdir" do
