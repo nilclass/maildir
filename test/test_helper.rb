@@ -1,7 +1,5 @@
-require 'rubygems'
 require 'test/unit'
 require 'shoulda'
-require 'fileutils'
 require 'maildir'
 
 # Require all the serializers
@@ -17,7 +15,7 @@ require 'fakefs'
 
 # Create a reusable maildir that's cleaned up when the tests are done
 def temp_maildir
-    Maildir.new("/tmp/maildir_test")
+  Maildir.new("/tmp/maildir_test")
 end
 
 # create the subdir tree:
@@ -32,7 +30,7 @@ def setup_subdirs(maildir)
   end
 end
 
-# Useful for testing that strings defined & not empty
+# Test that objects are neither nil nor empty
 def assert_not_empty(obj, msg='')
   assert !obj.nil? && !obj.empty?, msg
 end

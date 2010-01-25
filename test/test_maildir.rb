@@ -41,14 +41,14 @@ class TestMaildir < Test::Unit::TestCase
     should "list a new message" do
       @message = temp_maildir.add("")
       messages = temp_maildir.list(:new)
-      assert messages.include?(@message)
+      assert_equal messages, [@message]
     end
 
     should "list a cur message" do
       @message = temp_maildir.add("")
       @message.process
       messages = temp_maildir.list(:cur)
-      assert messages.include?(@message)
+      assert_equal messages, [@message]
     end
   end
 
