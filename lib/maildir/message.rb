@@ -118,6 +118,9 @@ class Maildir::Message
     define_method("#{key}!".to_sym) do
       add_flag(value)
     end
+    define_method("#{key}=".to_sym) do |v|
+      v ? add_flag(value) : remove_flag(value)
+    end
   end
 
   # Returns an array of single letter flags applied to the message
