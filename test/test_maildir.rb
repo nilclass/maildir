@@ -50,6 +50,12 @@ class TestMaildir < Test::Unit::TestCase
       messages = temp_maildir.list(:cur)
       assert_equal messages, [@message]
     end
+
+    should "find a message by unique name" do
+      @message = temp_maildir.add("")
+      @message.process
+      assert_equal temp_maildir.find(@message.unique_name), @message
+    end
   end
 
   context "Maildirs with the same path" do

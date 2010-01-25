@@ -85,6 +85,17 @@ class Maildir
     Maildir::Message.new(self, key)
   end
 
+  # Returns a message object for the given unique name.
+  # This allows retrieving messages where the flags may have changed,
+  # but obviously is slower than getting it by key.
+  def find(unique_name)
+    get_dir_listing(:cur).each do |key|
+      # NOTE: I used split(File::SEPARATOR) and split(':') here first,
+      #       but when benchmarking it turned out this is 2 times faster.
+      return get(key) if key.match(/cur\/(.*):.*$/)[1] == unique_name
+    end
+  end
+
   # Deletes the message for key by calling destroy() on the message.
   def delete(key)
     get(key).destroy
